@@ -4,7 +4,7 @@ class Webservice extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
     }
-
+ 
     private function getWeatherData() {
         $lat = "14.5995";
         $lon = "120.9842";
@@ -19,14 +19,14 @@ class Webservice extends CI_Controller {
         return json_decode($response, true);
     }
 
-    public function consume() {
+    public function forecast() {
         if (!$this->session->userdata('logged_in')) {
             redirect('login');
             return;
         }
 
         $data['weather'] = $this->getWeatherData();
-        $this->load->view('wsconsume', $data);
+        $this->load->view('dashboard_view', $data);
     }
 
     public function calendar() {
