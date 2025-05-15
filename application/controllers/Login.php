@@ -6,11 +6,11 @@ class Login extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->helper(['form', 'url']);
-        $this->load->library('session');
+        $this->load->library(['session']);
+        $this->load->model('Auth_model');
     }
 
     public function index() {
-        // Load the login view
         $this->load->view('login_view');
     }
 
@@ -18,19 +18,23 @@ class Login extends CI_Controller {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
-        // Simple static check — replace with DB check in real application
-        if ($username === 'admin' && $password === 'password') {
-            $this->session->set_userdata('logged_in', true);
-            redirect('webservice/consume');
+        $user = $this->Auth_model->login($username);
+
+        if ($user && password_verify($password, $user->password)) {
+            $this->session->set_userdata([
+                'logged_in' => true,
+                'user_id' => $user->id,
+                'username' => $user->username
+            ]);
+            redirect('webservice/forecast'); 
         } else {
-            $this->session->set_flashdata('error', 'Invalid credentials');
+            $this->session->set_flashdata('error', 'Invalid username or password');
             redirect('login');
         }
     }
 
     public function logout() {
-    $this->session->sess_destroy();
-    redirect('login');
-}
-
+        $this->session->sess_destroy();
+        redirect('login');
+    }
 }

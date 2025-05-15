@@ -21,12 +21,19 @@
     }
 
     .top-menu button {
-      background: white;
+      background: #5e35b1;
+      color: white;
       border: none;
       padding: 0.5em 1em;
       margin-left: 1em;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .top-menu button:hover {
+      background: #4527a0;
     }
 
     .calendar-container {
@@ -155,7 +162,7 @@
 <header>
   <h1>Event Calendar</h1>
   <div class="top-menu">
-    <button onclick="location.href='<?= site_url('webservice/consume') ?>'">Home</button>
+    <button onclick="location.href='<?= site_url('webservice/forecast') ?>'">Home</button>
     <button onclick="location.href='<?= site_url('webservice/calendar') ?>'">Calendar</button>
     <button onclick="location.href='<?= site_url('webservice/about') ?>'">About</button>
     <button onclick="location.href='<?= site_url('login/logout') ?>'">Logout</button>

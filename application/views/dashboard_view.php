@@ -22,12 +22,19 @@
     }
 
     .top-menu button {
-      background: white;
+      background: #5e35b1;
+      color: white;
       border: none;
       padding: 0.5em 1em;
       margin-left: 1em;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .top-menu button:hover {
+      background: #4527a0;
     }
 
     .forecast {
@@ -128,7 +135,7 @@
   <header>
     <h1>Weather Holiday Dashboard</h1>
     <div class="top-menu">
-      <button>Home</button>
+      <button onclick="location.href='<?= site_url('webservice/forecast') ?>'">Home</button>
       <button onclick="location.href='<?= site_url('webservice/calendar') ?>'">Calendar</button>
       <button onclick="location.href='<?= site_url('webservice/about') ?>'">About</button>
       <button onclick="location.href='<?= site_url('login/logout') ?>'">Logout</button>
@@ -173,7 +180,6 @@
   </div>
 
   <?php
-  // Define sample May holidays (you can expand or modify this)
   $philippineHolidays = [
     ['name' => 'Labor Day', 'description' => 'Regular holiday to celebrate workers.', 'date' => '2025-05-01', 'time' => '00:00'],
     ['name' => 'Eid al-Fitr', 'description' => 'Feast of the end of Ramadan (movable date).', 'date' => '2025-05-29', 'time' => '00:00'],
@@ -182,7 +188,7 @@
     ['name' => 'Santacruzan', 'description' => 'Finale parade of Flores de Mayo.', 'date' => '2025-05-31', 'time' => '17:00'],
   ];
 
-  $currentMonth = 5; // Always show May
+  $currentMonth = 5;
   $currentMonthName = 'May';
 
   $holidaysThisMonth = array_filter($philippineHolidays, function($holiday) use ($currentMonth) {
