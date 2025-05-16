@@ -1,10 +1,12 @@
 <?php
 class Webservice extends CI_Controller {
+
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
+        $this->load->model('Activity_model');
     }
- 
+
     private function getWeatherData() {
         $lat = "14.5995";
         $lon = "120.9842";
@@ -25,7 +27,9 @@ class Webservice extends CI_Controller {
             return;
         }
 
+        $user_id = $this->session->userdata('user_id');
         $data['weather'] = $this->getWeatherData();
+        $data['activities'] = $this->Activity_model->get_activities_by_user($user_id);
         $this->load->view('dashboard_view', $data);
     }
 
@@ -35,7 +39,9 @@ class Webservice extends CI_Controller {
             return;
         }
 
-        $this->load->view('calendar_view');
+        $user_id = $this->session->userdata('user_id');
+        $data['activities'] = $this->Activity_model->get_activities_by_user($user_id);
+        $this->load->view('calendar_view', $data);
     }
 
     public function about() {

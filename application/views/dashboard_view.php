@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather and Holiday Dashboard</title>
   <style>
@@ -128,6 +128,58 @@
     }
 
     .add-btn, .modal { display: none; }
+
+    /* Create Activity styles */
+    .create-activity-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #5e35b1;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+    .create-activity-btn:hover {
+      background: #4527a0;
+    }
+    .activity-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .activity-modal .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+      position: relative;
+    }
+    .activity-modal .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+    .modal-content input, .modal-content textarea, .modal-content select {
+      width: 100%;
+      padding: 0.6em;
+      margin-top: 0.5em;
+      margin-bottom: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -214,5 +266,45 @@
     <?php endforeach; ?>
   </div>
 
+  <!-- Floating Create Activity Button -->
+  <button class="create-activity-btn" onclick="document.getElementById('activityModal').style.display = 'flex';">+</button>
+
+  <!-- Create Activity Modal -->
+  <div class="activity-modal" id="activityModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="document.getElementById('activityModal').style.display='none'">&times;</span>
+      <h3>Create Activity</h3>
+      <form method="post" action="<?= site_url('activity/create') ?>">
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Description</label>
+        <textarea name="description"></textarea>
+
+        <label>Date</label>
+        <input type="date" name="date" required>
+
+        <label>Time</label>
+        <input type="time" name="time" required>
+
+        <label>Status</label>
+        <select name="status">
+          <option value="pending" selected>Pending</option>
+          <option value="completed">Completed</option>
+        </select>
+
+        <button type="submit" class="finish-button" style="width: 100%;">Save Activity</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    window.onclick = function(event) {
+      const modal = document.getElementById('activityModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
 </body>
 </html>

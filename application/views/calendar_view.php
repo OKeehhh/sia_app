@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendar - Weather Weather</title>
-  <style>
+  <style> 
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
@@ -174,45 +174,40 @@
     <h2>May 2025</h2>
   </div>
 
-  <div class="year-toggle">
-    <button>2025</button>
-    <button>2026</button>
-  </div>
 
   <div class="calendar-grid">
     <?php
-    $events = [
-      10 => [
-        ["Jose Rizal Day", "National Hero Celebration", "10/05/2025", "2:00 PM"],
-        ["Parade & Cultural Show", "Community Event", "10/05/2025", "4:00 PM"],
-        ["History Talk", "Educational Seminar", "10/05/2025", "6:30 PM"]
-      ],
-      14 => [
-        ["Developer Meetup", "Tech Talk & Networking", "14/05/2025", "4:30 PM"]
-      ],
-      25 => [
-        ["Team Building", "Department Event", "25/05/2025", "9:00 AM"]
-      ]
-    ];
+    // Group activities by day
+    $eventsByDay = [];
+    if (!empty($activities)) {
+      foreach ($activities as $activity) {
+        $day = (int)date('j', strtotime($activity['date']));
+        $eventsByDay[$day][] = $activity;
+      }
+    }
 
     for ($day = 1; $day <= 31; $day++) {
-  echo "<div class='day-card'>";
-  echo "<div class='day-number'>{$day}</div>";
-  echo "<div class='event-list'>";
+      echo "<div class='day-card'>";
+      echo "<div class='day-number'>{$day}</div>";
+      echo "<div class='event-list'>";
 
-  if (isset($events[$day])) {
-    foreach ($events[$day] as $event) {
-      list($title, $desc, $date, $time) = $event;
-      echo "<div class='event-box' onclick=\"showEventModal('{$title}', '{$desc}', '{$date}', '{$time}')\">";
-      echo "<h4>{$title}</h4>";
-      echo "<p>{$desc}</p>";
-      echo "<p>{$date} - {$time}</p>";
-      echo "</div>";
+      if (isset($eventsByDay[$day])) {
+        foreach ($eventsByDay[$day] as $event) {
+          $title = htmlspecialchars($event['title']);
+          $desc = htmlspecialchars($event['description']);
+          $date = htmlspecialchars($event['date']);
+          $time = htmlspecialchars($event['time']);
+
+          echo "<div class='event-box' onclick=\"showEventModal('{$title}', '{$desc}', '{$date}', '{$time}')\">";
+          echo "<h4>{$title}</h4>";
+          echo "<p>{$desc}</p>";
+          echo "<p>{$date} - {$time}</p>";
+          echo "</div>";
+        }
+      }
+
+      echo "</div></div>";
     }
-  }
-
-  echo "</div></div>";
-}
     ?>
   </div>
 </div>

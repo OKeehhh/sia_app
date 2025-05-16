@@ -1,9 +1,12 @@
 CREATE TABLE activity (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    description TEXT NOT NULL,
-    activity_date DATE NOT NULL,
-    activity_time TIME NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES weather_accounts(id) ON DELETE CASCADE
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    FOREIGN KEY (user_id) REFERENCES weather_accounts(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
