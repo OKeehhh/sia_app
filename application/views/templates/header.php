@@ -41,6 +41,14 @@
     .top-menu button:hover {
       background: #4527a0;
     }
+
+    .logout-btn {
+      background: #dc3545 !important;
+    }
+
+    .logout-btn:hover {
+      background: #c82333 !important;
+    }
   </style>
 </head>
 <body>
@@ -52,7 +60,16 @@
     <button onclick="location.href='<?= site_url('webservice/forecast') ?>'">Home</button>
     <button onclick="location.href='<?= site_url('webservice/calendar') ?>'">Calendar</button>
     <button onclick="location.href='<?= site_url('webservice/about') ?>'">About</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 </header>
+
+<script>
+function logout() {
+  if (confirm('Are you sure you want to logout?')) {
+    window.location.href = '<?= site_url('auth/logout') ?>';
+  }
+}
+</script>
 </body>
 </html> 

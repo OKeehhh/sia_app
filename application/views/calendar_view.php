@@ -735,7 +735,7 @@
               'id' => $eventId
             ]);
 
-            echo "<div class='{$boxClass}' onclick='showEventModalFromData({$eventData})'>";
+            echo "<div class='{$boxClass}' data-event-id='{$eventId}' onclick='showEventModalFromData({$eventData})'>";
             echo "<h4>{$title}</h4>";
             echo "<p>{$desc}</p>";
             echo "<p>{$date} - {$time}</p>";
@@ -942,11 +942,6 @@
       }
     }
 
-    // Keep the old function for backward compatibility
-    function showEventModal(title, desc, date, time, eventId) {
-      showEventModalFromData({ title, desc, date, time, id: eventId });
-    }
-
     function toggleEditMode() {
       const viewMode = document.getElementById('viewMode');
       const editMode = document.getElementById('editMode');
@@ -983,6 +978,29 @@
         editMode.style.display = 'none';
         editButton.style.display = 'block';
         updateButton.style.display = 'none';
+        
+        // Update view mode content
+        document.getElementById('modalTitle').innerText = currentEvent.title;
+        document.getElementById('modalDesc').innerText = currentEvent.desc;
+        document.getElementById('modalDate').innerText = currentEvent.date;
+        
+        // Update time display
+        const timeDisplay = document.getElementById('modalTimeDisplay');
+        if (currentEvent.time === 'All Day') {
+          timeDisplay.innerHTML = '<p>All Day</p>';
+        } else {
+          const [startTime, endTime] = currentEvent.time.split(' - ');
+          timeDisplay.innerHTML = `
+            <div class="time-group">
+              <label>Start Time:</label>
+              <p>${startTime}</p>
+            </div>
+            <div class="time-group">
+              <label>End Time:</label>
+              <p>${endTime}</p>
+            </div>
+          `;
+        }
       }
     }
 
@@ -1031,7 +1049,7 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          // Update the display
+          // Update the current event data
           currentEvent = { 
             title: newTitle, 
             desc: newDesc, 
@@ -1040,17 +1058,44 @@
             id: currentEvent.id 
           };
           
+          // Update the modal display
           document.getElementById('modalTitle').innerText = newTitle;
           document.getElementById('modalDesc').innerText = newDesc;
           document.getElementById('modalDate').innerText = newDate;
           
+          // Update time display
+          const timeDisplay = document.getElementById('modalTimeDisplay');
+          if (newTime === 'All Day') {
+            timeDisplay.innerHTML = '<p>All Day</p>';
+          } else {
+            const [startTime, endTime] = newTime.split(' - ');
+            timeDisplay.innerHTML = `
+              <div class="time-group">
+                <label>Start Time:</label>
+                <p>${startTime}</p>
+              </div>
+              <div class="time-group">
+                <label>End Time:</label>
+                <p>${endTime}</p>
+              </div>
+            `;
+          }
+          
+          // Update the event box in the calendar
+          const eventBox = document.querySelector(`[data-event-id="${currentEvent.id}"]`);
+          if (eventBox) {
+            eventBox.querySelector('h4').innerText = newTitle;
+            eventBox.querySelector('p:first-of-type').innerText = newDesc;
+            eventBox.querySelector('p:last-of-type').innerText = `${newDate} - ${newTime}`;
+          }
+          
           // Switch back to view mode
           toggleEditMode();
           
-          // Reload the page to show updated data
-          window.location.reload();
+          // Show success message
+          alert('Event updated successfully!');
         } else {
-          alert('Failed to update event: ' + (data.error || 'Unknown error'));
+          throw new Error(data.error || 'Failed to update event');
         }
       })
       .catch(error => {
@@ -1071,8 +1116,12 @@
         .then(response => response.json())
         .then(data => {
           if (data.success) {
+            // Remove the event box from the calendar
+            const eventBox = document.querySelector(`[data-event-id="${currentEvent.id}"]`);
+            if (eventBox) {
+              eventBox.remove();
+            }
             closeEventModal();
-            window.location.reload();
           } else {
             alert('Failed to delete event: ' + (data.error || 'Unknown error'));
           }
@@ -1174,11 +1223,56 @@
         method: 'POST',
         body: formData
       })
-      .then(response => {
-        if (response.ok) {
-          window.location.reload();
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Create new event box
+          const eventDate = formData.get('date');
+          const day = new Date(eventDate).getDate();
+          const eventBox = document.createElement('div');
+          eventBox.className = 'event-box';
+          eventBox.setAttribute('data-event-id', data.id);
+          
+          const title = formData.get('title');
+          const desc = formData.get('description');
+          const time = formData.get('time');
+          
+          eventBox.innerHTML = `
+            <h4>${title}</h4>
+            <p>${desc}</p>
+            <p>${eventDate} - ${time}</p>
+          `;
+          
+          // Add click handler
+          eventBox.onclick = function() {
+            showEventModalFromData({
+              title: title,
+              desc: desc,
+              date: eventDate,
+              time: time,
+              id: data.id
+            });
+          };
+          
+          // Find the correct day card and append the event
+          const dayCards = document.querySelectorAll('.day-card');
+          dayCards.forEach(card => {
+            const dayNumber = card.querySelector('.day-number');
+            if (dayNumber && parseInt(dayNumber.textContent) === day) {
+              const eventList = card.querySelector('.event-list');
+              if (eventList) {
+                eventList.appendChild(eventBox);
+              }
+            }
+          });
+          
+          // Close the create modal
+          closeCreateEventModal();
+          
+          // Show success message
+          alert('Event created successfully!');
         } else {
-          throw new Error('Failed to create event');
+          throw new Error(data.error || 'Failed to create event');
         }
       })
       .catch(error => {
