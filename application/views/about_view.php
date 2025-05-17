@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About - Weather Weather</title>
+  <?php
+  $title = 'About - Weather Weather';
+  $header_title = 'About';
+  $this->load->view('templates/header');
+  ?>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,84 +17,56 @@
       color: #000;
     }
 
-    header {
-      background: #1e1e24;
-      color: white;
-      padding: 1em 2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .top-menu button {
-      background: #5e35b1;
-      color: white;
-      border: none;
-      padding: 0.5em 1em;
-      margin-left: 1em;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-
-    .top-menu button:hover {
-      background: #4527a0;
-    }
-
     .about-container {
-      padding: 2em;
-      display: flex;
-      justify-content: center;
-    }
-
-    .about-card {
-      background: #f3f0ff;
-      border-radius: 12px;
-      padding: 2em;
       max-width: 800px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 2em auto;
+      padding: 2em;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
 
-    .about-card h2 {
-      color: #5e35b1;
+    .about-container h2 {
+      color: #333;
       margin-bottom: 1em;
     }
 
-    .about-card ul {
-      list-style: disc;
-      padding-left: 20px;
+    .about-container p {
+      line-height: 1.6;
+      margin-bottom: 1em;
+      color: #555;
     }
 
-    .about-card li {
+    .about-container ul {
+      list-style-type: disc;
+      margin-left: 2em;
       margin-bottom: 1em;
-      line-height: 1.6em;
+    }
+
+    .about-container li {
+      margin-bottom: 0.5em;
+      color: #555;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>About Weather Weather</h1>
-    <div class="top-menu">
-      <button onclick="location.href='<?= site_url('webservice/forecast') ?>'">Home</button>
-      <button onclick="location.href='<?= site_url('webservice/calendar') ?>'">Calendar</button>
-      <button onclick="location.href='<?= site_url('webservice/about') ?>'">About</button>
-      <button onclick="location.href='<?= site_url('login/logout') ?>'">Logout</button>
-    </div>
-  </header>
-
   <div class="about-container">
-    <div class="about-card">
-      <h2>What is Weather Weather?</h2>
-      <ul>
-        <li><strong>7-Day Weather Forecast:</strong> Get accurate and updated weather conditions for the next 7 days to plan ahead effectively.</li>
-        <li><strong>Upcoming Holidays:</strong> Stay informed about national and local holidays within the current month.</li>
-        <li><strong>Personal Event Management:</strong> Create and track your personal or work-related events within the system.</li>
-        <li><strong>Privacy-Centered:</strong> All events are stored securely and can only be viewed by the user who created them.</li>
-      </ul>
-    </div>
-  </div>
+    <h2>About Weather Weather</h2>
+    <p>Welcome to Weather Weather, your comprehensive weather and holiday planning application. Our platform combines accurate weather forecasting with holiday information to help you plan your activities effectively.</p>
+    
+    <h2>Features</h2>
+    <ul>
+      <li>Real-time weather forecasts for your location</li>
+      <li>Holiday calendar with important dates and events</li>
+      <li>Activity planning based on weather conditions</li>
+      <li>User-friendly interface for easy navigation</li>
+    </ul>
 
+    <h2>Our Mission</h2>
+    <p>We aim to provide accurate and reliable weather information while helping users plan their activities and holidays effectively. Our platform is designed to make weather-based decision making simple and intuitive.</p>
+
+    <h2>Contact</h2>
+    <p>For any questions or support, please contact us at support@weatherweather.com</p>
+  </div>
 </body>
 </html>
